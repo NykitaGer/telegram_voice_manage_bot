@@ -22,3 +22,6 @@ def add_voice_to_db(file_id: int, file_name: str) -> None:
     print(data)
     cursor.execute(insert_vioce_file, data)
     return
+
+
+
