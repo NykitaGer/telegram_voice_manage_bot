@@ -8,6 +8,8 @@ from aiogram import F
 from dotenv import load_dotenv
 
 from db import create_tables
+from commands import router as command_router
+from inline_mode import router as inline_router
 
 load_dotenv()
 API_TOKEN = os.getenv("BOT_TOKEN")
@@ -19,6 +21,7 @@ os.makedirs(MEDIA_DIR, exist_ok=True)
 
 async def main() -> None:
     dp = Dispatcher()
+    dp.include_routers(command_router, inline_router)
 
     create_tables()
 
