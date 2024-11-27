@@ -6,15 +6,24 @@ from aiogram.types import (
 )
 
 from aiogram.fsm.context import FSMContext
+from db import get_voices_from_db
 
 router = Router()
 
 
-def get_voice_messages() -> list[str] | None:
-    
-    return 
-
-
 @router.inline_query()
 async def inline_voice_message(inline_query: InlineQuery):
-    return
+    voices = get_voices_from_db()
+
+    results = []
+
+    for index, id, name in enumerate(voices):
+        message_content = InputTextMessageContent(
+            message_text="" # TODO: here needs to send a voice message by its id
+        )
+        result_id = f"{index}-{inline_query.from_user.id}"
+        results.append(InlineQueryResultArticle(
+            id=result_id, title=name, input_message_content=message_content
+        ))
+
+    await inline_query.answer(results, cache_time=0, is_personal=True)
