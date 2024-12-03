@@ -1,5 +1,4 @@
 .env
-db/
+db/server.db
 __pycache__/
-saved_media/
 server.db
