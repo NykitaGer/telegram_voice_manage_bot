@@ -7,7 +7,7 @@ from aiogram.types import BotCommand
 from dotenv import load_dotenv
 
 from db import DatabaseManager
-from routers import admin, voice, general
+from routers import admin, voice, general, inline
 
 
 load_dotenv()
@@ -26,6 +26,7 @@ async def main() -> None:
     dp.include_router(admin.router)
     dp.include_router(voice.router)
     dp.include_router(general.router)
+    dp.include_router(inline.router)
 
     db_manager._create_tables()
 

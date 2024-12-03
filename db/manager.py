@@ -54,6 +54,13 @@ class DatabaseManager:
         self.db.commit()
         return True
 
+    def delete_user(self, user_id: int) -> bool:
+        if any(user[0] == user_id for user in self.get_users()):
+            return False
+        query = "DELETE FROM users WHERE id = ?"
+        self.cursor.execute(query, (user_id,))
+        self.db.commit()
+
     def is_user_admin(self, user_id: int) -> bool:
         query = "SELECT is_admin FROM users WHERE id = ?"
         result = self.cursor.execute(query, (user_id,)).fetchone()

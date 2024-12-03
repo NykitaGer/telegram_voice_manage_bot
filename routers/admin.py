@@ -26,3 +26,13 @@ async def make_admin(message: Message):
     _, user_id = message.text.split(maxsplit=1)
     db.change_user_permission(int(user_id), True)
     await message.answer("✅This user is now an admin!")
+
+@router.message(F.text, Command("delete_user"))
+async def delete_user(message: Message):
+    if not is_user_admin(db, message.from_user.id):
+        await message.answer("❌You don't have permissions for this command!")
+        return
+    
+    _, user_id = message.text.split(maxsplit=1)
+    db.delete_user()
+    await message.answer("✅User was deleted successfully!")
