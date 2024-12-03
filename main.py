@@ -3,19 +3,19 @@ import logging
 import os
 
 from aiogram import Bot, Dispatcher
-from aiogram.enums import ParseMode
 from aiogram.types import BotCommand
-from aiogram import F
 from dotenv import load_dotenv
 
-from db import create_tables
-from inline_mode import router as inline_router
-from commands import router as command_router
+from db import DatabaseManager
+from routers import admin, voice, general
+
 
 load_dotenv()
 API_TOKEN = os.getenv("BOT_TOKEN")
 
 bot = Bot(token=API_TOKEN)
+
+db_manager = DatabaseManager()
 
 # MEDIA_DIR = "../saved_media"
 # os.makedirs(MEDIA_DIR, exist_ok=True)
@@ -23,10 +23,11 @@ bot = Bot(token=API_TOKEN)
 async def main() -> None:
     dp = Dispatcher()
 
-    dp.include_router(inline_router)
-    dp.include_router(command_router)
+    dp.include_router(admin.router)
+    dp.include_router(voice.router)
+    dp.include_router(general.router)
 
-    create_tables()
+    db_manager._create_tables()
 
     bot_commands = [
         BotCommand(command="/get_voices", description="Get available voices"),
