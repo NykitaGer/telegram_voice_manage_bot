@@ -104,6 +104,11 @@ class DatabaseManager:
         self.cursor.execute(query, (video_id, video_name))
         self.db.commit()
 
+    def delete_video(self, video_name: str) -> None:
+        query = "DELETE FROM videos WHERE name = ?"
+        self.cursor.execute(query, video_name)
+        self.db.commit()
+
     # Chat Management
     def add_chat(self, chat_id: int) -> None:
         query = "INSERT INTO chats (id, voice_pending, video_pending) VALUES (?, ?, ?)"
@@ -115,8 +120,18 @@ class DatabaseManager:
         self.cursor.execute(query, (is_pending, chat_id))
         self.db.commit()
 
+    def set_video_pending(self, chat_id: int, is_pending: bool) -> None:
+        query = "UPDATE chats SET video_pending = ? WHERE id = ?"
+        self.cursor.execute(query, (is_pending, chat_id))
+        self.db.commit()
+
     def is_voice_pending(self, chat_id: int) -> bool:
         query = "SELECT voice_pending FROM chats WHERE id = ?"
+        result = self.cursor.execute(query, (chat_id,)).fetchone()
+        return result[0] if result else False
+    
+    def is_video_pending(self, chat_id: int) -> bool:
+        query = "SELECT video_pending FROM chats WHERE id = ?"
         result = self.cursor.execute(query, (chat_id,)).fetchone()
         return result[0] if result else False
 

@@ -9,9 +9,9 @@ db = DatabaseManager()
 
 @router.message(F.text, Command("add_voice"))
 async def add_voice(message: Message):
-    if not is_user_admin(db, message.from_user.id):
-        await message.answer("❌You don't have permissions for this command!")
-        return
+    # if not is_user_admin(db, message.from_user.id):
+    #     await message.answer("❌You don't have permissions for this command!")
+    #     return
     db.set_voice_pending(message.chat.id, True)
     await message.answer("✅Send your voice messages")
 
